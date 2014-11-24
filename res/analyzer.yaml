@@ -1,0 +1,287 @@
+### MOD
+
+#broot.ingress.mod.Entry:
+#  is_real_name: true
+#
+#  methods:
+#    NemesisApp_onOnCreate: [null, V, Landroid/app/Application;]
+#    BaseItemDetailsUiCreator_OnAddRarityLabel: [null, V, $Table, $Skin, $Stage, $ItemRarity]
+#  fields:
+#    changedEntities: [changedEntities, $ImmutableSet]
+#
+#  find:
+#    - [interface_of, false, true, $PlayerModelImpl]
+#    - [by_method, false, true, getName]
+#    - [by_field, false, true, contentGroup]
+#    - [by_string, false, true, 'public interface abstract']
+#    - [by_super, false, true, Lcom/badlogic/gdx/scenes/scene2d/ui/Table;]
+#  find_by_string: "player.energyState"
+#  find_by_field: [CLIENT_TYPE, public static final]
+#  find_interface_of: $GroupDrawer
+#  find_by_implements: $PlayerListener
+#  super: $PlayerListener
+#  obf_name: com.nianticproject.ingress.gameentity.f
+#  is_enum: true
+#  find_multi_by_implements: $UiLayer
+#  find_multi_by_string: default
+#  find_multi_interface_of: $MenuControllerImpl
+#  find_multi_by_method: selectTab
+
+com.silvermoon.client.PKMain2:
+    is_real_name: true
+
+com.silvermoon.client.GruntMessages.msgMapElementGoldChange1:
+  find:
+    - [by_string, false, true, '"MapElementGoldChange1"']
+    - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgMapElementActionsChange1:
+#   find:
+#     - [by_string, false, true, '"MapElementActionsChange1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgGetSubEntries1:
+#   find:
+#     - [by_string, false, true, '"GetSubEntries1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgEnterChat1:
+#   find:
+#     - [by_string, false, true, '"EnterChat1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgCreateCharacter1:
+#   find:
+#     - [by_string, false, true, '"CreateCharacter1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgNewTopic1:
+#   find:
+#     - [by_string, false, true, '"NewTopic1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgInAppPurchaseItem1:
+#   find:
+#     - [by_string, false, true, '"InAppPurchaseItem1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgClientActionComplete1:
+#   find:
+#     - [by_string, false, true, '"ClientActionComplete1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgMapElementLocationChange1:
+#   find:
+#     - [by_string, false, true, '"MapElementLocationChange1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgDeleteComment1:
+#   find:
+#     - [by_string, false, true, '"DeleteComment1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgBuyScreenItems1:
+#   find:
+#     - [by_string, false, true, '"BuyScreenItems1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgBlockPlayerChat1:
+#   find:
+#     - [by_string, false, true, '"BlockPlayerChat1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgInAppPurchaseItems1:
+#   find:
+#     - [by_string, false, true, '"InAppPurchaseItems1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgWeightUpdate1:
+#   find:
+#     - [by_string, false, true, '"WeightUpdate1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgKiipEvent1:
+#   find:
+#     - [by_string, false, true, '"KiipEvent1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgMakeTypes1:
+#   find:
+#     - [by_string, false, true, '"MakeTypes1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgRequestHookedRating1:
+#   find:
+#     - [by_string, false, true, '"RequestHookedRating1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgDeleteEntryComment1:
+#   find:
+#     - [by_string, false, true, '"DeleteEntryComment1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgSettingsSync1:
+#   find:
+#     - [by_string, false, true, '"SettingsSync1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgUpdateTask1:
+#   find:
+#     - [by_string, false, true, '"UpdateTask1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgInAppPurchaseError1:
+#   find:
+#     - [by_string, false, true, '"InAppPurchaseError1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgInAppPurchaseVerified1:
+#   find:
+#     - [by_string, false, true, '"InAppPurchaseVerified1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgAndroidConfirmedPurchases1:
+#   find:
+#     - [by_string, false, true, '"AndroidConfirmedPurchases1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgConnectTo1:
+#   find:
+#     - [by_string, false, true, '"ConnectTo1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgNameInUseResponse1:
+#   find:
+#     - [by_string, false, true, '"NameInUseResponse1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgGetEntryComments1:
+#   find:
+#     - [by_string, false, true, '"GetEntryComments1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgInAppPurchaseVerifiedAndGiven1:
+#   find:
+#     - [by_string, false, true, '"InAppPurchaseVerifiedAndGiven1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgStoreCategoryDisplay1:
+#   find:
+#     - [by_string, false, true, '"StoreCategoryDisplay1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgBuyFeaturedItem1:
+#   find:
+#     - [by_string, false, true, '"BuyFeaturedItem1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgFoodUpdate1:
+#   find:
+#     - [by_string, false, true, '"FoodUpdate1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgGetListPage1:
+#   find:
+#     - [by_string, false, true, '"GetListPage1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgGetCommentsResponse1:
+#   find:
+#     - [by_string, false, true, '"GetCommentsResponse1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgClientInfo1:
+#   find:
+#     - [by_string, false, true, '"ClientInfo1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgResource1:
+#   find:
+#     - [by_string, false, true, '"Resource1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgMarkUpdatesRead1:
+#   find:
+#     - [by_string, false, true, '"MarkUpdatesRead1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgRequestPlayerLists1:
+#   find:
+#     - [by_string, false, true, '"RequestPlayerLists1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgReadTidbits1:
+#   find:
+#     - [by_string, false, true, '"ReadTidbits1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgPerfReport1:
+#   find:
+#     - [by_string, false, true, '"PerfReport1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgOptionDialogResponse1:
+#   find:
+#     - [by_string, false, true, '"OptionDialogResponse1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgGetBuyScreenItems1:
+#   find:
+#     - [by_string, false, true, '"GetBuyScreenItems1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgMapElementAttackResult1:
+#   find:
+#     - [by_string, false, true, '"MapElementAttackResult1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgObjectiveLocation1:
+#   find:
+#     - [by_string, false, true, '"ObjectiveLocation1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgClientSideNotificationPush1:
+#   find:
+#     - [by_string, false, true, '"ClientSideNotificationPush1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgSellItem1:
+#   find:
+#     - [by_string, false, true, '"SellItem1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgResourceRemoved1:
+#   find:
+#     - [by_string, false, true, '"ResourceRemoved1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+# com.silvermoon.client.GruntMessages.msgPlayerLists1:
+#   find:
+#     - [by_string, false, true, '"PlayerLists1"']
+#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+com.silvermoon.client.ACTIONS:
+  is_enum: true
+  find:
+    - [by_string, false, true, '"SHOW_SPLASH"']
+
+android.graphics.Point:
+  is_real_name: true
+
+java.lang.Object:
+  is_real_name: true;
+
+com.silvermoon.client.IMapElement:
+  methods:
+    getPoint: [null, $Point]
+    getHeight: [getHeight, I]
+    getWidth: [getWidth, I]
+  find:
+    - [by_super, false, true, $Object]
+    - [by_method, false, true, getHeight, 'public abstract']
+    - [by_method, false, true, getWidth, 'public abstract']
+    - [by_string, true, true, getString]
+
+com.silvermoon.client.MapElement:
+  find:
+    - [by_implements, false, true, $IMapElement]
