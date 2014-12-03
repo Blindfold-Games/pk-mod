@@ -15,6 +15,8 @@ LINE_PREFIX_LEN = len(LINE_PREFIX)
 PAT_SUPER_OPCODE = re.compile(r'^%s\.super (L.+;)$' % LINE_PREFIX, re.MULTILINE)
 PAT_IMPLEMENTS_OPCODE = re.compile(r'^%s\.implements (L.+;)$' % LINE_PREFIX, re.MULTILINE)
 
+SMALI_FILES_ROOT = os.path.join(HOME, 'app', 'smali')
+
 config = yaml.load(open('%s/config.yaml' % HOME))
 
 
@@ -137,7 +139,7 @@ class ClassMeta:
     def get_obf_file_name(self):
         if not self.obf_cls:
             raise ClassNotIdentified(self.get_orig_name())
-        return '/'.join(self.obf_pkg + [self.obf_cls]) + '.' + SMALI_FILE_EXT
+        return os.path.sep.join(self.obf_pkg + [self.obf_cls]) + '.' + SMALI_FILE_EXT
 
     def serialize(self):
         d = {}

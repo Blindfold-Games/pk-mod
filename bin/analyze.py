@@ -3,8 +3,9 @@
 import os
 import sys
 import grep
+import re
 
-from common import HOME, SMALI_FILE_EXT, LINE_PREFIX, ObjContext, PkgMap, SmaliFormatter, ClassMeta
+from common import HOME, SMALI_FILE_EXT, LINE_PREFIX, ObjContext, PkgMap, SmaliFormatter, ClassMeta, SMALI_FILES_ROOT
 
 
 class Analyzer:
@@ -16,11 +17,13 @@ class Analyzer:
     def analyze(self, release):
         self.release = release
         self.obj = ObjContext()
+        self.pkg = PkgMap()
 
         self.load()
         self.auto_analyze()
         self.check_if_found()
         self.warn_about_unknown()
+        self.auto_identify_methods()
         self.save()
         self.generate_proguard_map()
         self.generate_dex2jar_map()
@@ -46,8 +49,7 @@ class Analyzer:
                 find.append([k, not_, multi] + (v if isinstance(v, list) else [v]))
 
     def auto_analyze(self):
-        self.pkg = PkgMap()
-        for cls in filter(lambda cls: cls.is_identified() and cls.orig_pkg[0] != 'broot', self.obj.list_classes()):
+        for cls in filter(lambda cls: cls.is_identified(), self.obj.list_classes()):
             self.pkg.add_identified_class(cls)
 
         changed = True
@@ -76,6 +78,47 @@ class Analyzer:
             not_identified.difference_update(identified)
 
         self.analyze_enums()
+
+    def auto_identify_methods(self):
+        for cls in set(filter(lambda cls: cls.is_identified() and 'identify_methods' in cls.raw, self.obj.list_classes())):
+            for method, qs in cls.raw['identify_methods'].items():
+
+                if method in cls.methods:
+                    continue
+
+                def find_method(q):
+                    fm = getattr(self, 'find_method_' + q[0], None)
+                    if fm is None:
+                        raise Exception('Unsupported query method for identification of method %s in class %s: %s' % (method, cls.get_orig_name(), q[0]))
+
+                    return set(fm(*([cls] + q[2:])))
+
+                obf_names = None
+                for q in qs:
+                    if q[1]:
+                        continue
+                    ret = find_method(q)
+                    if obf_names:
+                        obf_names.intersection_update(ret)
+                    else:
+                        obf_names = ret
+
+                    if not obf_names:
+                        raise Exception('Can\'t find method "%s" in class "%s"' % (method, cls.get_orig_name()))
+
+                for q in qs:
+                    if not q[1]:
+                        continue
+                    obf_names.difference_update(find_method(q))
+
+                    if not obf_names:
+                        raise Exception('Can\'t find method "%s" in class "%s"' % (method, cls.get_orig_name()))
+
+                obf_names = list(obf_names)
+                if len(obf_names) != 1:
+                    raise Exception('Found multiple method for %s in class %s: %s' % (method, cls.get_orig_name(), obf_names))
+                cls.methods[method] = obf_names + q[2:]
+                print('Identified method %s of class %s' % (method, cls.get_orig_name()))
 
     def auto_identify_class(self, cls, max_unknown_pkg):
         print(cls.get_orig_name())
@@ -127,6 +170,7 @@ class Analyzer:
         parts = obf_names[0][1:-1].split('/')
         cls.obf_pkg = parts[:-1]
         cls.obf_cls = parts[-1]
+
         return True, -1
 
     def analyze_enums(self):
@@ -148,6 +192,14 @@ class Analyzer:
 
                 cls.fields[name] = [field, '$' + cls.orig_cls]
 
+    def find_method_by_interface(self, cls, *opt):
+        assert len(opt) > 0, "At least method's return type must be defined"
+        data = open(os.path.join(SMALI_FILES_ROOT, cls.get_obf_file_name()), 'r').read()
+        res = re.findall(r'^%s\.method %s (.+)\(%s\)%s$' % (
+            LINE_PREFIX, '.+', ''.join(self.obj.expr_type_multi(*opt[1:])).replace('[', r'\['), self.obj.expr_type(opt[0]))
+            , data, re.MULTILINE)
+        return set(res)
+
     def check_if_found(self):
         for cls in self.obj.list_classes():
             if cls.raw['find'] and not cls.is_identified():
@@ -168,7 +220,7 @@ class Analyzer:
             LINE_PREFIX, field_modif, field_name, self.obj.expr_type(field_type)), pkg)
 
     def can_find_class_by_method(self, cls, name, modif='.+'):
-        return all([self.obj.parse_expr(o).are_deps_identified() for o in cls.methods[name][1:]])
+        return (name in cls.methods) and all([self.obj.parse_expr(o).are_deps_identified() for o in cls.methods[name][1:]])
 
     def find_class_by_method(self, cls, pkg, method_name, method_modif='.+'):
         m = cls.methods[method_name]
