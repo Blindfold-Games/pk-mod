@@ -1,16 +1,16 @@
-version: 1.0.3.8
+version: 0.0.1.8
 
 signing:
   debug:
-    store: $MOD_HOME/res/pk-mod.keystore
+    store: $MOD_HOME/res/anddev.keystore
     pass: qwerty
-    alias: pk-mod
+    alias: anddev.keystore
 
   release:
-    store: $MOD_HOME/res/pk-mod.keystore
+    store: $MOD_HOME/res/anddev.keystore
     pass: qwerty
-    alias: pk-mod
+    alias: anddev.keystore
 
 maps_key:
-  debug: AIzaSyCKWltyu6lmzwos8gj1Yts7UjNw4MVC_4Y
-  release: AIzaSyCKWltyu6lmzwos8gj1Yts7UjNw4MVC_4Y
+  debug: AIzaSyDiuDOLlqQhubJOJZ1hTUyUhewoVgrqNQE
+  release: AIzaSyDiuDOLlqQhubJOJZ1hTUyUhewoVgrqNQE

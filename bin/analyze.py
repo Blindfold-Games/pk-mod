@@ -116,7 +116,7 @@ class Analyzer:
 
                 obf_names = list(obf_names)
                 if len(obf_names) != 1:
-                    raise Exception('Found multiple method for %s in class %s: %s' % (method, cls.get_orig_name(), obf_names))
+                    raise Exception('Found multiple methods for %s in class %s: %s' % (method, cls.get_orig_name(), obf_names))
                 cls.methods[method] = obf_names + q[2:]
                 print('Identified method %s of class %s' % (method, cls.get_orig_name()))
 
@@ -258,6 +258,8 @@ class Analyzer:
         out = open(os.path.join(HOME, 'build', 'obj.map'), 'w')
 
         for cls in self.obj.list_classes():
+            if cls.get_orig_name() == cls.get_obf_name():
+                continue
             out.write('%s -> %s:\n' % (cls.get_orig_name(), cls.get_obf_name()))
             for field_name, field_meta in cls.fields.items():
                 out.write('    %s %s -> %s\n' % (s2j(field_meta[1]), field_name, field_meta[0]))

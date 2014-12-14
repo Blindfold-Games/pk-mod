@@ -575,10 +575,6 @@ com.silvermoon.client.PKMain2:
 #   find:
 #     - [by_string, false, true, '"FolderUnreadCountsResponse1"']
 #     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
-# com.silvermoon.client.GruntMessages.msgMapElement1:
-#   find:
-#     - [by_string, false, true, '"MapElement1"']
-#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
 # com.silvermoon.client.GruntMessages.msgSuccessResponse1:
 #   find:
 #     - [by_string, false, true, '"SuccessResponse1"']
@@ -942,7 +938,7 @@ com.silvermoon.client.IMapElement:
   identify_methods:
     # original method name
     getPoint:
-      # method_to_use, Exclude [, Parameters]
+      # method_to_use, Exclude, ReturnType [, Parameters]
       - [by_interface, false, $Point]
   find:
     - [by_super, false, true, $Object]
@@ -953,3 +949,16 @@ com.silvermoon.client.IMapElement:
 com.silvermoon.client.MapElement:
   find:
     - [by_implements, false, true, $IMapElement]
+
+com.silvermoon.client.GruntMessages.msgMapElement1:
+  find:
+    - [by_string, false, true, '"MapElement1"']
+    - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+com.silvermoon.client.GameController:
+  find:
+    - [by_string, false, true, 'ACTION_MASK']
+    - [by_string, false, true, '"attention_exclamation"']
+  identify_methods:
+    pickMapElementAction:
+      - [by_interface, false, V, $MapElement]
