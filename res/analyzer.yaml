@@ -427,10 +427,6 @@ com.silvermoon.client.PKMain2:
 #   find:
 #     - [by_string, false, true, '"SetQuickSlot1"']
 #     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
-# com.silvermoon.client.GruntMessages.msgAction1:
-#   find:
-#     - [by_string, false, true, '"Action1"']
-#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
 # com.silvermoon.client.GruntMessages.msgStorePreviewDisplay1:
 #   find:
 #     - [by_string, false, true, '"StorePreviewDisplay1"']
@@ -811,10 +807,6 @@ com.silvermoon.client.PKMain2:
 #   find:
 #     - [by_string, false, true, '"ClientConfigs1"']
 #     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
-# com.silvermoon.client.GruntMessages.msgEstates1:
-#   find:
-#     - [by_string, false, true, '"Estates1"']
-#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
 # com.silvermoon.client.GruntMessages.msgRequestStorePreview1:
 #   find:
 #     - [by_string, false, true, '"RequestStorePreview1"']
@@ -949,6 +941,18 @@ com.silvermoon.client.IMapElement:
 com.silvermoon.client.MapElement:
   find:
     - [by_implements, false, true, $IMapElement]
+  identify_fields:
+    msgMapElement:
+      - [by_type, false, $msgMapElement1]
+
+com.silvermoon.client.GruntMessages.msgAction1:
+  find:
+    - [by_string, false, true, '"Action1"']
+    - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+  identify_fields:
+    ActionName:
+      - [by_method, false, '$GameController->performAction()']
+      - [by_type, false, Ljava/lang/String;]
 
 com.silvermoon.client.GruntMessages.msgMapElement1:
   find:
@@ -956,7 +960,7 @@ com.silvermoon.client.GruntMessages.msgMapElement1:
     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
   identify_fields:
     availableActions:
-      - [by_method, false, '$GameController->pickMapElementAction()']
+      - [by_method, false, '$GameController->selectMapElementsAction()']
       - [by_type, false, Ljava/util/List;]
 
 com.silvermoon.client.GameController:
@@ -964,5 +968,12 @@ com.silvermoon.client.GameController:
     - [by_string, false, true, 'ACTION_MASK']
     - [by_string, false, true, '"attention_exclamation"']
   identify_methods:
-    pickMapElementAction:
+    selectMapElementsAction:
       - [by_interface, false, V, $MapElement]
+    performAction:
+      - [by_interface, false, V, $MapElement, $msgAction1]
+
+com.silvermoon.client.GruntMessages.msgEstates1:
+  find:
+    - [by_string, false, true, '"Estates1"']
+    - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]

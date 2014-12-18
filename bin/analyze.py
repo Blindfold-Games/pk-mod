@@ -243,7 +243,6 @@ class Analyzer:
         return set(res)
 
     def find_field_by_method(self, cls, method):
-        assert method, "At least method's return type must be defined"
         m = self.obj.parse_expr(method)
         if len(m.parts) != 1 or m.parts[0].type != 'method':
             raise Exception('find_field_by_method: Invalid method specification')
