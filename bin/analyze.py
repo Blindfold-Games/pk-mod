@@ -11,7 +11,7 @@ from common import HOME, SMALI_FILE_EXT, LINE_PREFIX, ObjContext, PkgMap, SmaliF
 class Analyzer:
     def __init__(self):
         self.release = None
-        self.obj = None  # Class ObjContext
+        self.obj = None
         self.pkg = None
 
     def analyze(self, release):
@@ -24,6 +24,7 @@ class Analyzer:
         self.check_if_found()
         self.warn_about_unknown()
         self.auto_identify_methods()
+        self.auto_identify_fields()
         self.save()
         self.generate_proguard_map()
         self.generate_dex2jar_map()
@@ -118,7 +119,48 @@ class Analyzer:
                 if len(obf_names) != 1:
                     raise Exception('Found multiple methods for %s in class %s: %s' % (method, cls.get_orig_name(), obf_names))
                 cls.methods[method] = obf_names + q[2:]
-                print('Identified method %s of class %s' % (method, cls.get_orig_name()))
+                print('Found method %s of class %s' % (method, cls.get_orig_name()))
+
+    def auto_identify_fields(self):
+        for cls in set(filter(lambda cls: cls.is_identified() and 'identify_fields' in cls.raw, self.obj.list_classes())):
+            for field, qs in cls.raw['identify_fields'].items():
+
+                if field in cls.fields:
+                    continue
+
+                def find_field(q):
+                    fm = getattr(self, 'find_field_' + q[0], None)
+                    if fm is None:
+                        raise Exception('Unsupported query method for identification of field %s in class %s: %s' % (field, cls.get_orig_name(), q[0]))
+
+                    return set(fm(*([cls] + q[2:])))
+
+                obf_names = None
+                for q in qs:
+                    if q[1]:
+                        continue
+                    ret = find_field(q)
+                    if obf_names:
+                        obf_names.intersection_update(ret)
+                    else:
+                        obf_names = ret
+
+                    if not obf_names:
+                        raise Exception('Can\'t find field "%s" in class "%s"' % (field, cls.get_orig_name()))
+
+                for q in qs:
+                    if not q[1]:
+                        continue
+                    obf_names.difference_update(find_field(q))
+
+                    if not obf_names:
+                        raise Exception('Can\'t find field "%s" in class "%s"' % (field, cls.get_orig_name()))
+
+                obf_names = list(obf_names)
+                if len(obf_names) != 1:
+                    raise Exception('Found multiple fields for %s in class %s: %s' % (field, cls.get_orig_name(), obf_names))
+                cls.fields[field] = obf_names + q[2:]
+                print('Found field %s of class %s' % (field, cls.get_orig_name()))
 
     def auto_identify_class(self, cls, max_unknown_pkg):
         print(cls.get_orig_name())
@@ -199,6 +241,30 @@ class Analyzer:
             LINE_PREFIX, '.+', ''.join(self.obj.expr_type_multi(*opt[1:])).replace('[', r'\['), self.obj.expr_type(opt[0]))
             , data, re.MULTILINE)
         return set(res)
+
+    def find_field_by_method(self, cls, method):
+        assert method, "At least method's return type must be defined"
+        m = self.obj.parse_expr(method)
+        if len(m.parts) != 1 or m.parts[0].type != 'method':
+            raise Exception('find_field_by_method: Invalid method specification')
+        m.parts[0].def_only = True
+        data = open(os.path.join(SMALI_FILES_ROOT, m.parts[0].cls.get_obf_file_name()), 'r').read()
+        res = re.search('^{0}\.method .*? {1}$(.*?)^{0}\.end method$'.format(
+            LINE_PREFIX, m.output(True, True, True))
+            , data, re.MULTILINE | re.DOTALL)
+        data = res.group(1)
+        res = re.findall('^{0}.*?{1}->(.+?):.+?$'.format(
+            LINE_PREFIX, re.escape(cls.get_obf_name(True)))
+            , data, re.MULTILINE)
+        return set(res)
+
+    def find_field_by_type(self, cls, fld_type):
+        data = open(os.path.join(SMALI_FILES_ROOT, cls.get_obf_file_name()), 'r').read()
+        res = re.findall(r'^%s\.field .+ (.+):%s$' % (
+            LINE_PREFIX, re.escape(self.obj.expr_type(fld_type)))
+            , data, re.MULTILINE)
+        return set(res)
+
 
     def check_if_found(self):
         for cls in self.obj.list_classes():

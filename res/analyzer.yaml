@@ -920,10 +920,10 @@ com.silvermoon.client.PKMain2:
 #     - [by_string, false, true, '"ChatRoom1"']
 #     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
 
-com.silvermoon.client.ACTIONS:
-  is_enum: true
-  find:
-    - [by_string, false, true, '"SHOW_SPLASH"']
+# com.silvermoon.client.STATES:
+#   is_enum: true
+#   find:
+#     - [by_string, false, true, '"SHOW_SPLASH"']
 
 android.graphics.Point:
   is_real_name: true
@@ -954,6 +954,10 @@ com.silvermoon.client.GruntMessages.msgMapElement1:
   find:
     - [by_string, false, true, '"MapElement1"']
     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+  identify_fields:
+    availableActions:
+      - [by_method, false, '$GameController->pickMapElementAction()']
+      - [by_type, false, Ljava/util/List;]
 
 com.silvermoon.client.GameController:
   find:
