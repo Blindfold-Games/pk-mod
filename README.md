@@ -1,7 +1,7 @@
 Parallel Kingdom MOD
 ======
-This is a MOD for the Android's version of client for popular online MMORPG Parallel Kingdom.
-The base of this project is Ingress "broot" mod: https://github.com/Ingress-apk-mod/ingress-apk-mod (thanks guys)
+This is a MOD for the Android's version of client for popular game <a href="https://play.google.com/store/apps/details?id=com.silvermoon.client"><b>Parallel Kingdom MMO</b> by PerBlue</a>.
+The base of this project is <a href="https://github.com/Ingress-apk-mod/ingress-apk-mod">Ingress "broot" mod</a> (thanks guys)
 
 The purpose of this mod is to make game process more fun by reducing the level of tediousness of some processes and introducing some unique features which devs refuse to implement.
 
