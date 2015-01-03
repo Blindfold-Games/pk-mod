@@ -5,7 +5,8 @@
 
 -libraryjars build/ifc
 -libraryjars lib/android.jar
--libraryjars lib/gdx.jar
+-libraryjars lib/google-play-services.jar
+-libraryjars lib/maps.jar
 
 -target 1.6
 -optimizationpasses 5
@@ -17,7 +18,7 @@
 -repackageclasses ''
 
 
--keep,allowobfuscation class broot.ingress.mod.Entry {
+-keep,allowobfuscation class blind.pk.mod.Entry {
     <methods>;
 }
 

@@ -136,10 +136,13 @@ class Analyzer:
                     return set(fm(*([cls] + q[2:])))
 
                 obf_names = None
+                fld_type = None
                 for q in qs:
                     if q[1]:
                         continue
                     ret = find_field(q)
+                    if q[0] == 'by_type':
+                        fld_type = q[2]
                     if obf_names:
                         obf_names.intersection_update(ret)
                     else:
@@ -159,7 +162,9 @@ class Analyzer:
                 obf_names = list(obf_names)
                 if len(obf_names) != 1:
                     raise Exception('Found multiple fields for %s in class %s: %s' % (field, cls.get_orig_name(), obf_names))
-                cls.fields[field] = obf_names + q[2:]
+                if fld_type is None:
+                    raise Exception('by_type query should be provided for identification of field %s in class %s' % (field, cls.get_orig_name()))
+                cls.fields[field] = obf_names + [fld_type]
                 print('Found field %s of class %s' % (field, cls.get_orig_name()))
 
     def auto_identify_class(self, cls, max_unknown_pkg):
@@ -264,6 +269,12 @@ class Analyzer:
             , data, re.MULTILINE)
         return set(res)
 
+    def find_field_by_name(self, cls, fld_name_regex):
+        data = open(os.path.join(SMALI_FILES_ROOT, cls.get_obf_file_name()), 'r').read()
+        res = re.findall(r'^%s\.field .+ (%s):.*$' % (
+            LINE_PREFIX, re.escape(self.obj.expr_type(fld_name_regex)))
+            , data, re.MULTILINE)
+        return set(res)
 
     def check_if_found(self):
         for cls in self.obj.list_classes():
@@ -323,8 +334,8 @@ class Analyzer:
         out = open(os.path.join(HOME, 'build', 'obj.map'), 'w')
 
         for cls in self.obj.list_classes():
-            if cls.get_orig_name() == cls.get_obf_name():
-                continue
+#            if cls.get_orig_name() == cls.get_obf_name():
+#                continue
             out.write('%s -> %s:\n' % (cls.get_orig_name(), cls.get_obf_name()))
             for field_name, field_meta in cls.fields.items():
                 out.write('    %s %s -> %s\n' % (s2j(field_meta[1]), field_name, field_meta[0]))

@@ -4,7 +4,7 @@
 -dontoptimize
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,LocalVariable*Table,*Annotation*,Synthetic,EnclosingMethod
 
--keep class broot.ingress.mod.** {
+-keep class blind.pk.mod.** {
     <fields>;
     <methods>;
 }

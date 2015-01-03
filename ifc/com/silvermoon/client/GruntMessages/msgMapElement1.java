@@ -5,5 +5,7 @@ import java.util.List;
 
 public class msgMapElement1 extends GruntMessage
 {
-    public List availableActions;
+    public String globalId;
+
+    public List<msgAction1> availableActions;
 }
