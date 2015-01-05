@@ -247,6 +247,13 @@ class Analyzer:
             , data, re.MULTILINE)
         return set(res)
 
+    # def find_method_by_string(self, cls, st):
+    #     data = open(os.path.join(SMALI_FILES_ROOT, cls.get_obf_file_name()), 'r').read()
+    #     res = re.findall(r'^{0}\.method .+? ([^\s]+?)\(.*?\)(!(?!\.end).)*$.*?{1}.*?^{0}\.end method$'.format(
+    #          LINE_PREFIX, re.escape(st))
+    #         , data, re.DOTALL | re.MULTILINE)
+    #     return set(res)
+
     def find_field_by_method(self, cls, method):
         m = self.obj.parse_expr(method)
         if len(m.parts) != 1 or m.parts[0].type != 'method':
@@ -315,6 +322,15 @@ class Analyzer:
     def find_class_interface_of(self, cls, pkg, obj_name):
         return self.obj.edit_cls(obj_name[1:]).find_implemented()
 
+    def can_find_class_by_method_interface(self, cls, ret_type, *args):
+        return self.obj.parse_expr(ret_type).are_deps_identified() and \
+               all([self.obj.parse_expr(o).are_deps_identified() for o in args])
+
+    def find_class_by_method_interface(self, cls, pkg, ret_type, *args):
+        return self.find_classes_by_string(r'^%s\.method .+ .+\(%s\)%s$' % (
+            LINE_PREFIX, ''.join(self.obj.expr_type_multi(*args)).replace('[', r'\['), self.obj.expr_type(ret_type)), pkg)
+
+
     def warn_about_unknown(self):
         for cls in self.obj.list_classes():
             if not cls.is_identified():
@@ -334,8 +350,6 @@ class Analyzer:
         out = open(os.path.join(HOME, 'build', 'obj.map'), 'w')
 
         for cls in self.obj.list_classes():
-#            if cls.get_orig_name() == cls.get_obf_name():
-#                continue
             out.write('%s -> %s:\n' % (cls.get_orig_name(), cls.get_obf_name()))
             for field_name, field_meta in cls.fields.items():
                 out.write('    %s %s -> %s\n' % (s2j(field_meta[1]), field_name, field_meta[0]))

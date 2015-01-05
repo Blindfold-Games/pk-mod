@@ -10,7 +10,7 @@ com.silvermoon.client.PKMain2:
   is_real_name: true
   identify_methods:
     sendMapElementAction:
-      - [by_interface, false, V, $msgAction1, Ljava/lang/String;]
+      - [by_interface, false, V, $msgAction, Ljava/lang/String;]
     onCreate:
       - [by_interface, false, V, Landroid/os/Bundle;]
 
@@ -34,18 +34,27 @@ com.silvermoon.client.MapElement:
     - [by_implements, false, true, $IMapElement]
   identify_fields:
     msgMapElement:
-      - [by_type, false, $msgMapElement1]
+      - [by_type, false, $msgMapElement]
 
-com.silvermoon.client.GruntMessages.msgAction1:
+com.silvermoon.client.GruntMessages.msgDisplayLayer:
+  fields:
+    info: [info, Ljava/lang/String;]
+  find:
+    - [by_string, false, true, '"DisplayLayer1"']
+    - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+com.silvermoon.client.GruntMessages.msgAction:
   find:
     - [by_string, false, true, '"Action1"']
     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
   identify_fields:
-    ActionName:
+    command:
       - [by_method, false, '$GameController->performAction()']
       - [by_type, false, Ljava/lang/String;]
+    filters:
+      - [by_type, false, Ljava/lang/String;]
 
-com.silvermoon.client.GruntMessages.msgMapElement1:
+com.silvermoon.client.GruntMessages.msgMapElement:
   find:
     - [by_string, false, true, '"MapElement1"']
     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
@@ -53,10 +62,16 @@ com.silvermoon.client.GruntMessages.msgMapElement1:
     availableActions:
       - [by_method, false, '$GameController->selectMapElementsAction()']
       - [by_type, false, Ljava/util/List;]
-    globalId:
+    elementId:
       - [by_method, false, '$GameController->performAction()']
       - [by_type, false, Ljava/lang/String;]
       - [by_name, true, 'name']
+    displayLayers:
+      - [by_type, false, Ljava/util/List;]
+      - [by_method, false, '$MapElementDisplayLayersChangeListener->processMessage()']
+    timerTimeLeft:
+      - [by_type, false, Ljava/lang/Integer;]
+      - [by_method, false, '$GameController->updateElementTimer()']
 
 com.silvermoon.client.GameController:
   find:
@@ -66,12 +81,35 @@ com.silvermoon.client.GameController:
     selectMapElementsAction:
       - [by_interface, false, V, $MapElement]
     performAction:
-      - [by_interface, false, V, $MapElement, $msgAction1]
+      - [by_interface, false, V, $MapElement, $msgAction]
+    updateElementTimer:
+      - [by_interface, false, V, $msgMapElementUpdateTimer]
 
-com.silvermoon.client.GruntMessages.msgEstates1:
+com.silvermoon.client.GruntMessages.msgEstates:
   find:
     - [by_string, false, true, '"Estates1"']
     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+com.silvermoon.client.GruntMessages.msgMapElementDisplayLayersChange:
+  find:
+    - [by_string, false, true, '"MapElementDisplayLayersChange1"']
+    - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+com.silvermoon.client.MapElementDisplayLayersChangeListener:
+  find:
+    - [by_implements, false, true, "Lcom/perblue/grunt/translate/GruntListener;"]
+    - [by_method_interface, false, true, V, "Lcom/perblue/grunt/translate/GruntConnection;", $msgMapElementDisplayLayersChange]
+
+  identify_methods:
+    processMessage:
+      - [by_interface, false, V, 'Lcom/perblue/grunt/translate/GruntConnection;', $msgMapElementDisplayLayersChange]
+
+com.silvermoon.client.GruntMessages.msgMapElementUpdateTimer:
+  find:
+    - [by_string, false, true, '"MapElementUpdateTimer1"']
+    - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
+
+
 
 # com.silvermoon.client.GruntMessages.msgMapElementGoldChange1:
 #   find:
@@ -497,10 +535,6 @@ com.silvermoon.client.GruntMessages.msgEstates1:
 #   find:
 #     - [by_string, false, true, '"AirMove1"']
 #     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
-# com.silvermoon.client.GruntMessages.msgMapElementDisplayLayersChange1:
-#   find:
-#     - [by_string, false, true, '"MapElementDisplayLayersChange1"']
-#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
 # com.silvermoon.client.GruntMessages.msgRemoveBuyScreenItem1:
 #   find:
 #     - [by_string, false, true, '"RemoveBuyScreenItem1"']
@@ -568,10 +602,6 @@ com.silvermoon.client.GruntMessages.msgEstates1:
 # com.silvermoon.client.GruntMessages.msgSubItemsResponse1:
 #   find:
 #     - [by_string, false, true, '"SubItemsResponse1"']
-#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
-# com.silvermoon.client.GruntMessages.msgMapElementUpdateTimer1:
-#   find:
-#     - [by_string, false, true, '"MapElementUpdateTimer1"']
 #     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
 # com.silvermoon.client.GruntMessages.msgUpdateProfile1:
 #   find:
@@ -676,10 +706,6 @@ com.silvermoon.client.GruntMessages.msgEstates1:
 # com.silvermoon.client.GruntMessages.msgMapElementMovementSpeedChange1:
 #   find:
 #     - [by_string, false, true, '"MapElementMovementSpeedChange1"']
-#     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
-# com.silvermoon.client.GruntMessages.msgDisplayLayer1:
-#   find:
-#     - [by_string, false, true, '"DisplayLayer1"']
 #     - [by_super, false, true, Lcom/perblue/grunt/translate/GruntMessage;]
 # com.silvermoon.client.GruntMessages.msgChatActions1:
 #   find:

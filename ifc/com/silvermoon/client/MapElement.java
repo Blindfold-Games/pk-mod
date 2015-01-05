@@ -2,11 +2,9 @@ package com.silvermoon.client;
 
 import android.graphics.Point;
 
-import com.silvermoon.client.GruntMessages.msgMapElement1;
-
 public class MapElement implements IMapElement
 {
-    public msgMapElement1 msgMapElement;
+    public com.silvermoon.client.GruntMessages.msgMapElement msgMapElement;
 
     @Override
     public Point getPoint() {
