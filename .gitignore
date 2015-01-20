@@ -1,2 +1,5 @@
 app
 build
+out
+
+*.jar

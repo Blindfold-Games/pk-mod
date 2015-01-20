@@ -136,10 +136,13 @@ class Analyzer:
                     return set(fm(*([cls] + q[2:])))
 
                 obf_names = None
+                fld_type = None
                 for q in qs:
                     if q[1]:
                         continue
                     ret = find_field(q)
+                    if q[0] == 'by_type':
+                        fld_type = q[2]
                     if obf_names:
                         obf_names.intersection_update(ret)
                     else:
@@ -159,7 +162,9 @@ class Analyzer:
                 obf_names = list(obf_names)
                 if len(obf_names) != 1:
                     raise Exception('Found multiple fields for %s in class %s: %s' % (field, cls.get_orig_name(), obf_names))
-                cls.fields[field] = obf_names + q[2:]
+                if fld_type is None:
+                    raise Exception('by_type query should be provided for identification of field %s in class %s' % (field, cls.get_orig_name()))
+                cls.fields[field] = obf_names + [fld_type]
                 print('Found field %s of class %s' % (field, cls.get_orig_name()))
 
     def auto_identify_class(self, cls, max_unknown_pkg):
@@ -242,8 +247,14 @@ class Analyzer:
             , data, re.MULTILINE)
         return set(res)
 
+    # def find_method_by_string(self, cls, st):
+    #     data = open(os.path.join(SMALI_FILES_ROOT, cls.get_obf_file_name()), 'r').read()
+    #     res = re.findall(r'^{0}\.method .+? ([^\s]+?)\(.*?\)(!(?!\.end).)*$.*?{1}.*?^{0}\.end method$'.format(
+    #          LINE_PREFIX, re.escape(st))
+    #         , data, re.DOTALL | re.MULTILINE)
+    #     return set(res)
+
     def find_field_by_method(self, cls, method):
-        assert method, "At least method's return type must be defined"
         m = self.obj.parse_expr(method)
         if len(m.parts) != 1 or m.parts[0].type != 'method':
             raise Exception('find_field_by_method: Invalid method specification')
@@ -265,6 +276,12 @@ class Analyzer:
             , data, re.MULTILINE)
         return set(res)
 
+    def find_field_by_name(self, cls, fld_name_regex):
+        data = open(os.path.join(SMALI_FILES_ROOT, cls.get_obf_file_name()), 'r').read()
+        res = re.findall(r'^%s\.field .+ (%s):.*$' % (
+            LINE_PREFIX, re.escape(self.obj.expr_type(fld_name_regex)))
+            , data, re.MULTILINE)
+        return set(res)
 
     def check_if_found(self):
         for cls in self.obj.list_classes():
@@ -305,6 +322,15 @@ class Analyzer:
     def find_class_interface_of(self, cls, pkg, obj_name):
         return self.obj.edit_cls(obj_name[1:]).find_implemented()
 
+    def can_find_class_by_method_interface(self, cls, ret_type, *args):
+        return self.obj.parse_expr(ret_type).are_deps_identified() and \
+               all([self.obj.parse_expr(o).are_deps_identified() for o in args])
+
+    def find_class_by_method_interface(self, cls, pkg, ret_type, *args):
+        return self.find_classes_by_string(r'^%s\.method .+ .+\(%s\)%s$' % (
+            LINE_PREFIX, ''.join(self.obj.expr_type_multi(*args)).replace('[', r'\['), self.obj.expr_type(ret_type)), pkg)
+
+
     def warn_about_unknown(self):
         for cls in self.obj.list_classes():
             if not cls.is_identified():
@@ -324,8 +350,6 @@ class Analyzer:
         out = open(os.path.join(HOME, 'build', 'obj.map'), 'w')
 
         for cls in self.obj.list_classes():
-            if cls.get_orig_name() == cls.get_obf_name():
-                continue
             out.write('%s -> %s:\n' % (cls.get_orig_name(), cls.get_obf_name()))
             for field_name, field_meta in cls.fields.items():
                 out.write('    %s %s -> %s\n' % (s2j(field_meta[1]), field_name, field_meta[0]))

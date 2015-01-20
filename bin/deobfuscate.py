@@ -12,13 +12,12 @@ def deobfuscate(apk):
             class_path += ':'.join(os.path.join(root, file) for file in filter(lambda f: f.endswith('.jar'), files))
         subprocess.check_call(r'''
         java -Xms512m -Xmx1024m -classpath "{_classpath}" "com.googlecode.dex2jar.tools.Dex2jarCmd" -f -o {temp_dir}/__temp.jar {input_apk}
-        java -Xms512m -Xmx1024m -classpath "{_classpath}" "com.googlecode.dex2jar.tools.JarRemap" -f -c $MOD_HOME/build/obj.d2j-map -o {temp_dir}/__remap.jar {temp_dir}/__temp.jar
-        java -Xms512m -Xmx1024m -classpath "{_classpath}" "com.googlecode.dex2jar.tools.Jar2Dex" -f -o {temp_dir}/classes.dex {temp_dir}/__remap.jar
+        java -Xms512m -Xmx1024m -classpath "{_classpath}" "com.googlecode.dex2jar.tools.JarRemap" -f -c $MOD_HOME/build/obj.d2j-map -o $MOD_HOME/__remap.jar {temp_dir}/__temp.jar
+        java -Xms512m -Xmx1024m -classpath "{_classpath}" "com.googlecode.dex2jar.tools.Jar2Dex" -f -o {temp_dir}/classes.dex $MOD_HOME/__remap.jar
         cp {input_apk} {temp_dir}/__temp.apk
         pushd {temp_dir}
         zip __temp.apk classes.dex
         rm __temp.jar
-        rm __remap.jar
         rm classes.dex
         popd
         rm -rf $MOD_HOME/deobf
